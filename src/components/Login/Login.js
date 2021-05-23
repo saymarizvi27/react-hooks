@@ -24,6 +24,7 @@ const Login = (props) => {
   //   "comp mounts also for every state update and every key stroke , after every render cycle ");
   // });
 
+  
   // useEffect(()=>{
   //   console.log("EFFECT RUNNING comp mounts 123");
   // },[]);
@@ -51,16 +52,16 @@ const Login = (props) => {
 
   // },[]);
 
-  // useEffect(() => {
-  //   const idetifier= setTimeout(() => {
-  //     console.log('inside Identifier')
-  //     setFormIsValid(enteredEmail.includes('@') && enteredPassword.trim().length > 6);
-  //   }, 500);
-  //   return() =>{
-  //     console.log('CLEANUP')
-  //     clearTimeout(idetifier);
-  //   };
-  // }, [enteredEmail, enteredPassword]);
+  useEffect(() => {
+    const idetifier= setTimeout(() => {
+      console.log('inside Identifier')
+      setFormIsValid(enteredEmail.includes('@') && enteredPassword.trim().length > 6);
+    }, 500);
+    return() =>{
+      console.log('CLEANUP')
+      clearTimeout(idetifier);
+    };
+  }, [enteredEmail, enteredPassword]);
 
   const passwordChangeHandler = (event) => {
     setEnteredPassword(event.target.value);
