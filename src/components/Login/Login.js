@@ -19,16 +19,48 @@ const Login = (props) => {
     );
   };
 
-  useEffect(() => {
-    const idetifier= setTimeout(() => {
-      console.log('inside Identifier')
-      setFormIsValid(enteredEmail.includes('@') && enteredPassword.trim().length > 6);
-    }, 500);
-    return() =>{
-      console.log('CLEANUP')
-      clearTimeout(idetifier);
-    };
-  }, [enteredEmail, enteredPassword]);
+  // useEffect(()=>{
+  //   console.log("EFFECT RUNNING "+
+  //   "comp mounts also for every state update and every key stroke , after every render cycle ");
+  // });
+
+  // useEffect(()=>{
+  //   console.log("EFFECT RUNNING comp mounts 123");
+  // },[]);
+
+  // useEffect(()=>{
+  //   console.log("EFFECT RUNNING every time password chnages-------");
+  // },[enteredPassword]);
+
+  // useEffect(()=>{
+  //   //RUNS ON LOAD OF PAGE AND RETURN RUNS BEFORE CONSOLE.LOG STATEMENT  EACH RENDER OF THE PAGE 
+  //   console.log("CLEAN UP ---1");
+
+  //   return ()=>{
+  //     console.log("INSIDE CLEAN UP---1");
+  //   };
+
+  // },[enteredPassword]);
+
+  // useEffect(()=>{
+  //   console.log("CLEAN UP ---2");
+
+  //   return ()=>{
+  //     console.log("INSIDE CLEAN UP---2");
+  //   };
+
+  // },[]);
+
+  // useEffect(() => {
+  //   const idetifier= setTimeout(() => {
+  //     console.log('inside Identifier')
+  //     setFormIsValid(enteredEmail.includes('@') && enteredPassword.trim().length > 6);
+  //   }, 500);
+  //   return() =>{
+  //     console.log('CLEANUP')
+  //     clearTimeout(idetifier);
+  //   };
+  // }, [enteredEmail, enteredPassword]);
 
   const passwordChangeHandler = (event) => {
     setEnteredPassword(event.target.value);
