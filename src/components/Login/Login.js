@@ -1,114 +1,96 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from "react";
 
-import Card from '../UI/Card/Card';
-import classes from './Login.module.css';
-import Button from '../UI/Button/Button';
+import Card from "../UI/Card/Card";
+import classes from "./Login.module.css";
+import Button from "../UI/Button/Button";
 
 const Login = (props) => {
-  const [enteredEmail, setEnteredEmail] = useState('');
-  const [emailIsValid, setEmailIsValid] = useState();
-  const [enteredPassword, setEnteredPassword] = useState('');
-  const [passwordIsValid, setPasswordIsValid] = useState();
   const [formIsValid, setFormIsValid] = useState(false);
 
-  const emailChangeHandler = (event) => {
-    setEnteredEmail(event.target.value);
+  const [emailState, dispatchEmail] = useReducer(
+    ((state, action) => {
+      if (action.type === "USER_INPUT") {
+        return { value: action.val, isValid: action.val.includes("@") };
+      }
+      if (action.type === "INPUT_BLUR") {
+        return { value: state.value, isValid: state.value.includes("@") };
+      }
+      return { value: "", isValid: false };
+    }),
+    { value: "", isValid: null }
+  );
 
-    setFormIsValid(
-      event.target.value.includes('@') && enteredPassword.trim().length > 6
-    );
-  };
 
-  // useEffect(()=>{
-  //   console.log("EFFECT RUNNING "+
-  //   "comp mounts also for every state update and every key stroke , after every render cycle ");
-  // });
-
-  
-  // useEffect(()=>{
-  //   console.log("EFFECT RUNNING comp mounts 123");
-  // },[]);
-
-  // useEffect(()=>{
-  //   console.log("EFFECT RUNNING every time password chnages-------");
-  // },[enteredPassword]);
-
-  // useEffect(()=>{
-  //   //RUNS ON LOAD OF PAGE AND RETURN RUNS BEFORE CONSOLE.LOG STATEMENT  EACH RENDER OF THE PAGE 
-  //   console.log("CLEAN UP ---1");
-
-  //   return ()=>{
-  //     console.log("INSIDE CLEAN UP---1");
-  //   };
-
-  // },[enteredPassword]);
-
-  // useEffect(()=>{
-  //   console.log("CLEAN UP ---2");
-
-  //   return ()=>{
-  //     console.log("INSIDE CLEAN UP---2");
-  //   };
-
-  // },[]);
+  const [passwordState, dispatchPassword] = useReducer(
+    ((state, action) => {
+      if (action.type === "USER_INPUT") {
+        return { value: action.val, isValid: action.val.trim().length > 6 };
+      }
+      if (action.type === "INPUT_BLUR") {
+        return { value: state.value, isValid: state.value.trim().length > 6 };
+      }
+      return { value: "", isValid: false };
+    }),
+    { value: "", isValid: null }
+  );
 
   useEffect(() => {
-    const idetifier= setTimeout(() => {
+    const idetifier = setTimeout(() => {
       console.log('inside Identifier')
-      setFormIsValid(enteredEmail.includes('@') && enteredPassword.trim().length > 6);
+      setFormIsValid(emailState.value.includes('@') && passwordState.value.trim().length > 6);
     }, 500);
-    return() =>{
+    return () => {
       console.log('CLEANUP')
       clearTimeout(idetifier);
     };
-  }, [enteredEmail, enteredPassword]);
+  }, [emailState, passwordState]);
+
+  const emailChangeHandler = (event) => {
+    dispatchEmail({ type: "USER_INPUT", val: event.target.value });
+  };
 
   const passwordChangeHandler = (event) => {
-    setEnteredPassword(event.target.value);
-
-    setFormIsValid(
-      event.target.value.trim().length > 6 && enteredEmail.includes('@')
-    );
+    dispatchPassword({ type: "USER_INPUT", val: event.target.value });
   };
 
   const validateEmailHandler = () => {
-    setEmailIsValid(enteredEmail.includes('@'));
+    dispatchEmail({ type: "INPUT_BLUR" });
   };
 
   const validatePasswordHandler = () => {
-    setPasswordIsValid(enteredPassword.trim().length > 6);
+    dispatchPassword({ type: "INPUT_BLUR" });
   };
 
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onLogin(enteredEmail, enteredPassword);
+    props.onLogin(emailState.value, passwordState.value);
   };
 
   return (
     <Card className={classes.login}>
       <form onSubmit={submitHandler}>
         <div
-          className={`${classes.control} ${emailIsValid === false ? classes.invalid : ''
+          className={`${classes.control} ${emailState.valid === false ? classes.invalid : ""
             }`}
         >
           <label htmlFor="email">E-Mail</label>
           <input
             type="email"
             id="email"
-            value={enteredEmail}
+            value={emailState.value}
             onChange={emailChangeHandler}
             onBlur={validateEmailHandler}
           />
         </div>
         <div
-          className={`${classes.control} ${passwordIsValid === false ? classes.invalid : ''
+          className={`${classes.control} ${passwordState.valid === false ? classes.invalid : ""
             }`}
         >
           <label htmlFor="password">Password</label>
           <input
             type="password"
             id="password"
-            value={enteredPassword}
+            value={passwordState.value}
             onChange={passwordChangeHandler}
             onBlur={validatePasswordHandler}
           />
