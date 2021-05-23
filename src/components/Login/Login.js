@@ -10,6 +10,7 @@ const Login = (props) => {
   const [emailState, dispatchEmail] = useReducer(
     ((state, action) => {
       if (action.type === "USER_INPUT") {
+        console.log("action",action.val);
         return { value: action.val, isValid: action.val.includes("@") };
       }
       if (action.type === "INPUT_BLUR") {
@@ -34,16 +35,19 @@ const Login = (props) => {
     { value: "", isValid: null }
   );
 
+  const { isValid: emailIsValid } = emailState;
+  const { isValid: passwordIsValid } = passwordState;
+
   useEffect(() => {
     const idetifier = setTimeout(() => {
       console.log('inside Identifier')
-      setFormIsValid(emailState.value.includes('@') && passwordState.value.trim().length > 6);
+      setFormIsValid(emailIsValid && emailIsValid);
     }, 500);
     return () => {
       console.log('CLEANUP')
       clearTimeout(idetifier);
     };
-  }, [emailState, passwordState]);
+  }, [emailIsValid, passwordIsValid]);
 
   const emailChangeHandler = (event) => {
     dispatchEmail({ type: "USER_INPUT", val: event.target.value });
