@@ -81,6 +81,7 @@ const Login = (props) => {
           <input
             type="email"
             id="email"
+            name="email"
             value={emailState.value}
             onChange={emailChangeHandler}
             onBlur={validateEmailHandler}
@@ -94,6 +95,7 @@ const Login = (props) => {
           <input
             type="password"
             id="password"
+            name="password"
             value={passwordState.value}
             onChange={passwordChangeHandler}
             onBlur={validatePasswordHandler}
